@@ -7,7 +7,8 @@ import pandas as pd
 # print(df.dtypes)
 # print(df.describe())
 # print((df == '?').sum())
-
+#Here i just removed the data that had a ton of empty slots like weight
+# I also reformated the ? into Unknown
 def clean_data(files):
     # df = pd.read_csv('./diabetes+130-us+hospitals+for+years+1999-2008/diabetic_data.csv')
     df = pd.read_csv(files)
