@@ -1,7 +1,9 @@
+import joblib
 import pandas as pd
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report, accuracy_score
 from process import clean_data
@@ -21,6 +23,10 @@ def train_knn(x_tr, y_tr, x_val, y_val):
     knn.fit(x_tr, y_tr)
     evaluate_model("K-Nearest Neighbors", knn, x_val, y_val)
 
+    filename = 'knn_model.pkl'
+    joblib.dump(knn, filename)
+    print(f"Model saved to {filename}")
+
 def train_logistic(x_tr, y_tr, x_val, y_val):
     #To do:
     #call clean data
@@ -29,6 +35,10 @@ def train_logistic(x_tr, y_tr, x_val, y_val):
     log_regression.fit(x_tr, y_tr)
     evaluate_model("Logistic Regression", log_regression, x_val, y_val)
 
+    filename = 'logistic_reg_model.pkl'
+    joblib.dump(log_regression, filename)
+    print(f"Model saved to {filename}")
+
 def train_nn(x_tr, y_tr, x_val, y_val):
     #To do:
     #call clean data
@@ -36,6 +46,19 @@ def train_nn(x_tr, y_tr, x_val, y_val):
     nn = MLPClassifier(hidden_layer_sizes=(64,32), max_iter = 500, random_state = 42)
     nn.fit(x_tr, y_tr)
     evaluate_model("Neural Network", nn, x_val, y_val)
+
+    filename = 'nn_model.pkl'
+    joblib.dump(nn, filename)
+    print(f"Model saved to {filename}")
+
+def train_rf(x_tr, y_tr, x_val, y_val):
+    rf = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42)
+    rf.fit(x_tr, y_tr)
+    evaluate_model("Random Forest", rf, x_val, y_val)
+
+    filename = 'rf_model.pkl'
+    joblib.dump(rf, filename)
+    print(f"Model saved to {filename}")
 
 if __name__ == '__main__':
     x_tr, x_val, x_te, y_tr, y_val, y_te = clean_data("./diabetes+130-us+hospitals+for+years+1999-2008/diabetic_data.csv")
@@ -48,3 +71,4 @@ if __name__ == '__main__':
     train_knn(x_tr_scaled, y_tr, x_val_scaled, y_val)
     train_logistic(x_tr_scaled, y_tr, x_val_scaled, y_val)
     train_nn(x_tr_scaled, y_tr, x_val_scaled, y_val)
+    train_rf(x_tr_scaled, y_tr, x_val_scaled, y_val)
