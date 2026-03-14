@@ -46,6 +46,9 @@ def clean_data(files):
 
     #now turn the readmition into number 0 for NOT readdmited, 1 for Readmiited less than 30 days
     #2 for READMITTED AFTER 30
+    df['diag_1'] = df['diag_1'].apply(diagnoses)
+    df['diag_2'] = df['diag_2'].apply(diagnoses)
+    df['diag_3'] = df['diag_3'].apply(diagnoses)
     df['readmitted'] = df['readmitted'].map({'NO':0, '>30':1,'<30':2})
     # print(df['readmitted'].value_counts())
     #TURNS EVERYTHING  stringINTO 1 0 T F etc instead of words
@@ -56,7 +59,9 @@ def clean_data(files):
     # print(df.shape)
     #TO DOOO MAKE THE SPLIT
     X = df.drop(["readmitted"], axis=1)
+
     y = df["readmitted"]
+
     x_rest, x_te, y_rest, y_te = train_test_split(X, y, test_size=0.2, random_state=42)
     x_tr, x_val, y_tr, y_val = train_test_split(x_rest, y_rest, test_size=0.25, random_state=42)
     return x_tr, x_val,x_te, y_tr, y_val, y_te
@@ -68,7 +73,41 @@ def diagnoses(codes):
     except:
         if str(codes).startswith('V'):
             return 'Other'
-
+        if str(codes).startswith('E'):
+            return 'External'
+        return 'Other'
+    if 250<=number< 251:
+        return 'Diabetes'
+    elif 390<=number< 460:
+        return 'Circulatory'
+    elif 460 <= number < 520:
+        return 'Respiratory'
+    elif 520 <= number < 580:
+        return 'Digestive'
+    elif 580 <= number < 630:
+        return 'Genitourinary'
+    elif 710 <= number < 740:
+        return 'Musculoskeletal'
+    elif 800 <= number < 1000:
+        return 'Injury'
+    elif 240 <= number < 280:
+        return 'Endocrine'
+    elif 280 <= number < 290:
+        return 'Blood'
+    elif 290 <= number < 320:
+        return 'Mental'
+    elif 320 <= number < 390:
+        return 'Nervous'
+    elif 140 <= number < 240:
+        return 'Neoplasms'
+    elif 680 <= number < 710:
+        return 'Skin'
+    elif 1 <= number < 140:
+        return 'Infectious'
+    elif 740 <= number < 760:
+        return 'Congenital'
+    else:
+        return 'Other'
 
 if __name__ == "__main__":
     x_tr, x_val,x_te, y_tr, y_val, y_te = clean_data("./diabetes+130-us+hospitals+for+years+1999-2008/diabetic_data.csv")
