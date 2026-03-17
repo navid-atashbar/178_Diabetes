@@ -19,10 +19,11 @@ def clean_data(files):
     # # Useless information
     # df.drop(["encounter_id", "patient_nbr"], axis=1, inplace=True)
     
-    df = df[df["diag_1"] !='?']
-    df = df[df["diag_2"] !='?']
-    df = df[df["diag_3"] !='?']
-    df.replace('?', "Unknown", inplace=True)
+    #df = df[df["diag_1"] !='?']
+    #df = df[df["diag_2"] !='?']
+    #df = df[df["diag_3"] !='?']
+    #df.replace('?', "Unknown", inplace=True)
+    df[['diag_1', 'diag_2', 'diag_3']] = df[['diag_1', 'diag_2', 'diag_3']].replace('?', "Unknown")
     df['admission_type_id'] = df['admission_type_id'].map({1:'Emergency', 2:'Urgent',3:'Elective',4:'Newborn',5:'NotAvailable', 6:'Null',7:'TraumaCenter',8:'NotMapped'})
 
 
@@ -51,17 +52,26 @@ def clean_data(files):
         23: 'BornInside', 24: 'BornOutside', 25: 'TransferAmbulatory',
         26: 'TransferHospice'
     })
-
+    age_map = {
+        '[0-10)': 5, '[10-20)': 15, '[20-30)': 25, '[30-40)': 35,
+        '[40-50)': 45, '[50-60)': 55, '[60-70)': 65,
+        '[70-80)': 75, '[80-90)': 85, '[90-100)': 95
+    }
+    df['age'] = df['age'].map(age_map)
     #now turn the readmition into number 0 for NOT readdmited, 1 for Readmiited less than 30 days
     #2 for READMITTED AFTER 30
     df['diag_1'] = df['diag_1'].apply(diagnoses)
     df['diag_2'] = df['diag_2'].apply(diagnoses)
     df['diag_3'] = df['diag_3'].apply(diagnoses)
-    df['readmitted'] = df['readmitted'].map({'NO':0, '>30':1,'<30':2})
+    df['readmitted'] = df['readmitted'].map({'NO':0, '>30':0,'<30':1})
     # print(df['readmitted'].value_counts())
     #TURNS EVERYTHING  stringINTO 1 0 T F etc instead of words
-    df.dropna(subset=['admission_type_id', 'discharge_disposition_id',
-                      'admission_source_id', 'readmitted'], inplace=True)
+   # df.dropna(subset=['admission_type_id', 'discharge_disposition_id',
+     #                 'admission_source_id', 'readmitted'], inplace=True)
+    df[['admission_type_id', 'discharge_disposition_id', 'admission_source_id']] = \
+    df[['admission_type_id', 'discharge_disposition_id', 'admission_source_id']].fillna('Unknown')
+    df['num_visits'] = df['number_outpatient'] + df['number_emergency'] + df['number_inpatient']
+    df.drop(['number_outpatient', 'number_emergency', 'number_inpatient'], axis=1, inplace=True)
     df = pd.get_dummies(df)
 
     # print(df.shape)

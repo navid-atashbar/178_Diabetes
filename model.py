@@ -42,7 +42,7 @@ def train_logistic(x_tr, y_tr, x_val, y_val):
     #To do:
     #call clean data
     #predict the model
-    log_regression = LogisticRegression(max_iter=1000,class_weight='balanced',C=0.1)
+    log_regression = LogisticRegression(max_iter=3000,solver='saga',class_weight='balanced',C=1)
     log_regression.fit(x_tr, y_tr)
     evaluate_model("Logistic Regression", log_regression, x_val, y_val)
 
@@ -54,7 +54,7 @@ def train_nn(x_tr, y_tr, x_val, y_val):
     #To do:
     #call clean data
     #predict the model
-    nn = MLPClassifier(hidden_layer_sizes=(256,128,64), max_iter = 500, early_stopping=True,validation_fraction=0.1,random_state = 42)
+    nn = MLPClassifier(hidden_layer_sizes=(64,32),solver='adam', max_iter = 500, early_stopping=True,validation_fraction=0.1,random_state = 42)
     nn.fit(x_tr, y_tr)
     evaluate_model("Neural Network", nn, x_val, y_val)
 
@@ -74,12 +74,16 @@ def train_rf(x_tr, y_tr, x_val, y_val):
 if __name__ == '__main__':
     x_tr, x_val, x_te, y_tr, y_val, y_te = clean_data("./diabetes+130-us+hospitals+for+years+1999-2008/diabetic_data.csv")
 
-    scaler = StandardScaler()
-    x_tr_scaled = scaler.fit_transform(x_tr)
-    x_val_scaled = scaler.transform(x_val)
-    x_te_scaled = scaler.transform(x_te)
+   # scaler = StandardScaler()
+   # x_tr_scaled = scaler.fit_transform(x_tr)
+   # x_val_scaled = scaler.transform(x_val)
+    #x_te_scaled = scaler.transform(x_te)
 
-    train_knn(x_tr_scaled, y_tr, x_val_scaled, y_val)
-    train_logistic(x_tr_scaled, y_tr, x_val_scaled, y_val)
-    train_nn(x_tr_scaled, y_tr, x_val_scaled, y_val)
-    train_rf(x_tr_scaled, y_tr, x_val_scaled, y_val)
+    #train_knn(x_tr_scaled, y_tr, x_val_scaled, y_val)
+    #train_logistic(x_tr_scaled, y_tr, x_val_scaled, y_val)
+    #train_nn(x_tr_scaled, y_tr, x_val_scaled, y_val)
+    #train_rf(x_tr_scaled, y_tr, x_val_scaled, y_val)
+    train_knn(x_tr, y_tr, x_val, y_val)
+    train_logistic(x_tr, y_tr, x_val, y_val)
+    train_nn(x_tr, y_tr, x_val, y_val)
+    train_rf(x_tr, y_tr, x_val, y_val)
