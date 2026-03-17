@@ -10,7 +10,15 @@ from sklearn.model_selection import train_test_split
 def clean_data(files):
     # df = pd.read_csv('./diabetes+130-us+hospitals+for+years+1999-2008/diabetic_data.csv')
     df = pd.read_csv(files)
+    
     df.drop(["weight","encounter_id", "patient_nbr"], axis=1, inplace=True)
+    
+    # # High number missing or N/A values
+    # df.drop(["weight","medical_specialty", "payer_code"], axis=1, inplace=True)
+
+    # # Useless information
+    # df.drop(["encounter_id", "patient_nbr"], axis=1, inplace=True)
+    
     df = df[df["diag_1"] !='?']
     df = df[df["diag_2"] !='?']
     df = df[df["diag_3"] !='?']
