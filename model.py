@@ -76,16 +76,23 @@ def train_rf(x_tr, y_tr, x_val, y_val):
 if __name__ == '__main__':
     x_tr, x_val, x_te, y_tr, y_val, y_te = clean_data("./diabetes+130-us+hospitals+for+years+1999-2008/diabetic_data.csv")
 
-   # scaler = StandardScaler()
-   # x_tr_scaled = scaler.fit_transform(x_tr)
-   # x_val_scaled = scaler.transform(x_val)
-    #x_te_scaled = scaler.transform(x_te)
+    scaler = StandardScaler()
+    x_tr_scaled = scaler.fit_transform(x_tr)
+    x_val_scaled = scaler.transform(x_val)
+    x_te_scaled = scaler.transform(x_te)
 
-    #train_knn(x_tr_scaled, y_tr, x_val_scaled, y_val)
-    #train_logistic(x_tr_scaled, y_tr, x_val_scaled, y_val)
-    #train_nn(x_tr_scaled, y_tr, x_val_scaled, y_val)
-    #train_rf(x_tr_scaled, y_tr, x_val_scaled, y_val)
-    train_knn(x_tr, y_tr, x_val, y_val)
-    train_logistic(x_tr, y_tr, x_val, y_val)
-    train_nn(x_tr, y_tr, x_val, y_val)
-    train_rf(x_tr, y_tr, x_val, y_val)
+    train_knn(x_tr_scaled, y_tr, x_val_scaled, y_val)
+    train_logistic(x_tr_scaled, y_tr, x_val_scaled, y_val)
+    train_nn(x_tr_scaled, y_tr, x_val_scaled, y_val)
+    train_rf(x_tr_scaled, y_tr, x_val_scaled, y_val)
+    #train_knn(x_tr, y_tr, x_val, y_val)
+    #train_logistic(x_tr, y_tr, x_val, y_val)
+    #train_nn(x_tr, y_tr, x_val, y_val)
+    #train_rf(x_tr, y_tr, x_val, y_val)
+    print("\nResults")
+    for name, filename in [("K-Nearest Neighbors", "knn_model.pkl"),
+                           ("Logistic Regression", "logistic_reg_model.pkl"),
+                           ("Neural Network", "nn_model.pkl"),
+                           ("Random Forest", "rf_model.pkl")]:
+        model = joblib.load(filename)
+        evaluate_model(f"{name} (TEST)", model, x_te_scaled, y_te)

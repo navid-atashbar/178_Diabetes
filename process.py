@@ -12,7 +12,7 @@ def clean_data(files):
     df = pd.read_csv(files)
     
     df.drop(["weight","encounter_id", "patient_nbr"], axis=1, inplace=True)
-    
+    df.replace('?', 'Unknown', inplace=True)
     # # High number missing or N/A values
     # df.drop(["weight","medical_specialty", "payer_code"], axis=1, inplace=True)
 
@@ -23,7 +23,7 @@ def clean_data(files):
     #df = df[df["diag_2"] !='?']
     #df = df[df["diag_3"] !='?']
     #df.replace('?', "Unknown", inplace=True)
-    df[['diag_1', 'diag_2', 'diag_3']] = df[['diag_1', 'diag_2', 'diag_3']].replace('?', "Unknown")
+    #[['diag_1', 'diag_2', 'diag_3']] = df[['diag_1', 'diag_2', 'diag_3']].replace('?', "Unknown")
     df['admission_type_id'] = df['admission_type_id'].map({1:'Emergency', 2:'Urgent',3:'Elective',4:'Newborn',5:'NotAvailable', 6:'Null',7:'TraumaCenter',8:'NotMapped'})
 
 
@@ -46,7 +46,7 @@ def clean_data(files):
         4: 'TransferHospital', 5: 'TransferSNF', 6: 'TransferOther',
         7: 'EmergencyRoom', 8: 'CourtLaw', 9: 'NotAvailable',
         10: 'TransferCAH', 11: 'NormalDelivery', 12: 'PrematureDelivery',
-        13: 'SickBaby', 14: 'ExtramuralBirth', 15: 'NotAvailable',
+        13: 'SickBaby', 14: 'ExtramuralBirth', 15: 'NotAvailable', 16: 'NULL',
         17: 'NULL', 18: 'TransferHomeHealth', 19: 'ReadmitHomeHealth',
         20: 'NotMapped', 21: 'Unknown', 22: 'TransferInpatient',
         23: 'BornInside', 24: 'BornOutside', 25: 'TransferAmbulatory',
