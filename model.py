@@ -7,6 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report, accuracy_score
 from process import clean_data
+from sklearn.utils.class_weight import compute_sample_weight
 
 def evaluate_model(name, model, x_val, y_val):
     predictions = model.predict(x_val)
@@ -23,14 +24,14 @@ def train_knn(x_tr, y_tr, x_val, y_val):
     accuracy_best  = 0
     for k in [3,5,7,11,15]:
 
-        knn = KNeighborsClassifier(n_neighbors = k)
+        knn = KNeighborsClassifier(n_neighbors = k, weights='distance')
         knn.fit(x_tr, y_tr)
         acc = accuracy_score(y_val, knn.predict(x_val))
         print(f"K-NN Accuracy K={k}: {acc:.4f}")
         if acc > accuracy_best:
             accuracy_best = acc
             best_k = k
-    knn = KNeighborsClassifier(n_neighbors=best_k)
+    knn = KNeighborsClassifier(n_neighbors=best_k, weights='distance')
     knn.fit(x_tr, y_tr)
     evaluate_model("K-Nearest Neighbors", knn, x_val, y_val)
 
@@ -54,8 +55,9 @@ def train_nn(x_tr, y_tr, x_val, y_val):
     #To do:
     #call clean data
     #predict the model
+    sample_weights = compute_sample_weight(class_weight='balanced', y=y_tr)
     nn = MLPClassifier(hidden_layer_sizes=(64,32),solver='adam', max_iter = 500, early_stopping=True,validation_fraction=0.1,random_state = 42)
-    nn.fit(x_tr, y_tr)
+    nn.fit(x_tr, y_tr,  sample_weight=sample_weights)
     evaluate_model("Neural Network", nn, x_val, y_val)
 
     filename = 'nn_model.pkl'
