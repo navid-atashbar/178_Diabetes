@@ -84,11 +84,11 @@ if __name__ == '__main__':
     train_knn(x_tr_scaled, y_tr, x_val_scaled, y_val)
     train_logistic(x_tr_scaled, y_tr, x_val_scaled, y_val)
     train_nn(x_tr_scaled, y_tr, x_val_scaled, y_val)
-    train_rf(x_tr_scaled, y_tr, x_val_scaled, y_val)
+   # train_rf(x_tr_scaled, y_tr, x_val_scaled, y_val)
     #train_knn(x_tr, y_tr, x_val, y_val)
     #train_logistic(x_tr, y_tr, x_val, y_val)
     #train_nn(x_tr, y_tr, x_val, y_val)
-    #train_rf(x_tr, y_tr, x_val, y_val)
+    train_rf(x_tr, y_tr, x_val, y_val)
     print("\nResults")
     for name, filename in [("K-Nearest Neighbors", "knn_model.pkl"),
                            ("Logistic Regression", "logistic_reg_model.pkl"),
