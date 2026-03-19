@@ -95,4 +95,8 @@ if __name__ == '__main__':
                            ("Neural Network", "nn_model.pkl"),
                            ("Random Forest", "rf_model.pkl")]:
         model = joblib.load(filename)
-        evaluate_model(f"{name} (TEST)", model, x_te_scaled, y_te)
+        if name == "Random Forest":
+            evaluate_model(f"{name} (TEST)", model, x_te, y_te)
+        else:
+            evaluate_model(f"{name} (TEST)", model, x_te_scaled, y_te)
+        #evaluate_model(f"{name} (TEST)", model, x_te_scaled, y_te)
